@@ -1,0 +1,76 @@
+name: $(Build.BuildId)
+
+trigger:
+  - "main"
+
+# pool:
+#   name: "Azure Pipelines"
+
+# pool:
+#   name: "Om Namh Shivay"
+pool:
+    vmImage: 'ubuntu-latest'
+    # vmImage: 'windows-latest'
+
+variables:
+  Sonarcloud.ProjectKey: $(Build.Repository.Name)
+  tag: 'live' #'$(Build.BuildId)'
+  appName: 'keshavsingh4522/micr-aggregator-demo'
+  dockerfile: 'src/$(Build.Repository.Name).API/Dockerfile'
+  BuildConfiguration: 'Release'
+
+stages:
+  - stage: Build_Test_Analyse
+    displayName: Build, Test and Analyse
+    jobs:
+      - job:
+        displayName: Build, Test and Analyse
+        steps:
+          - task: DotNetCoreCLI@2
+            displayName: "Restore Nuget Packages"
+            inputs:
+              command: "restore"
+              feedsToUse: "select"
+              vstsFeed: "MICR.Packages.V4"
+
+          - task: DotNetCoreCLI@2
+            displayName: "Build all projects in repo"
+            inputs:
+              command: "build"
+              arguments: '--configuration $(BuildConfiguration)'
+
+          - task: DotNetCoreCLI@2
+            displayName: "Execute Unit Test Projects"
+            inputs:
+              command: "test"
+              arguments: '--collect "Code Coverage"'
+  - stage: Build
+    displayName: Build Container Image And Push To Docker Hub
+    dependsOn: []
+    variables:
+      - group: 'MICR-Core-Envs'
+      - name: Environment
+        value: Development
+    # variables:
+    # - group: 'AWS Demo'
+    jobs:
+    - job: Build
+      displayName: Build
+      steps:
+      - task: Docker@2
+        displayName: 'Build Container Image > $(Environment)'
+        inputs:
+          command: 'build'
+          repository: $(appName)
+          Dockerfile: $(dockerfile)
+          buildContext: $(System.DefaultWorkingDirectory)
+          containerRegistry: $(DockerConnectionName)
+          arguments: --build-arg ENVD=$(Environment)
+          tags: $(tag)
+      - task: Docker@2
+        displayName: 'Push Container Image'
+        inputs:
+          containerRegistry: $(DockerConnectionName)
+          repository: $(appName)
+          command: 'push'
+          tags: $(tag)
