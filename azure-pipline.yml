@@ -2,6 +2,7 @@ name: $(Build.BuildId)
 
 trigger:
   - "main"
+  - "master"
 
 # pool:
 #   name: "Azure Pipelines"
