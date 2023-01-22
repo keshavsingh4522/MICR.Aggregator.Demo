@@ -15,6 +15,6 @@ jobs:
       run: docker build . --file src/MICR.Aggregator.Demo.API/Dockerfile --tag micr-agr-demo:latest --build-arg ENVD=Development
     - name: push docker images
       run: |
-        export CR_PAT=${{github.PACKAGE_TOKEN}}
+        export CR_PAT=${{secrets.PACKAGE_TOKEN}}
         echo $CR_PAT | docker login ghcr.io -u keshavsingh4522 --password-stdin
         docker push ghcr.io/keshavsingh4522/micr-agr-demo:latest
