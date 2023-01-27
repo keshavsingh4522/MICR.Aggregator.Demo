@@ -44,9 +44,8 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v3.3.0
         with:
-          context: .
+          context: ./src/MICR.Aggregator.Demo.API
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: "ENVD=Development"
-          file: src/MICR.Aggregator.Demo.API
