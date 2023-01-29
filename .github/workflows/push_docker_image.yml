@@ -49,5 +49,5 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: "ENVD=Development"
-          outputs: annotation-index.org.opencontainers.image.description=My multi-arch image
+          #outputs: annotation-index.org.opencontainers.image.description=My multi-arch image
           # outputs: type=image,name=target,annotation-index.org.opencontainers.image.description=My multi-arch image
