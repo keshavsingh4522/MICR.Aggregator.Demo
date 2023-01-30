@@ -58,6 +58,11 @@ stages:
     - job: Build
       displayName: Build
       steps:
+      - task: CmdLine@2
+        inputs:
+          script: |
+            ls -la
+            tree
       - task: Docker@2
         displayName: 'Build Container Image > $(Environment)'
         inputs:
