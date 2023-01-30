@@ -63,6 +63,7 @@ stages:
           script: |
             ls -la
             tree
+            pwd
       - task: Docker@2
         displayName: 'Build Container Image > $(Environment)'
         inputs:
