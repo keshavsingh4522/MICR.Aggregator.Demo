@@ -17,7 +17,7 @@ variables:
   Sonarcloud.ProjectKey: $(Build.Repository.Name)
   tag: 'live' #'$(Build.BuildId)'
   appName: 'keshavsingh4522/micr-aggregator-demo'
-  dockerfile: 'src/$(Build.Repository.Name).API/Dockerfile'
+  dockerfile: src/MICR.Aggregator.Demo.API/Dockerfile #'src/$(Build.Repository.Name).API/Dockerfile'
   BuildConfiguration: 'Release'
 
 stages:
